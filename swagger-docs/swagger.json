@@ -1,0 +1,318 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Software SGG Web API",
+    "version": "v1"
+  },
+  "paths": {
+    "/Authentication/Login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Realiza a autenticação do usuário com base nas credenciais fornecidas.",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "query",
+            "description": "Login de usuário utilizado para autenticação.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "Senha correspondente ao usuário.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUserModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUserModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUserModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/CustomQuery": {
+      "get": {
+        "tags": [
+          "CustomQuery"
+        ],
+        "summary": "Retorna a lista de todas as consultas personalizadas cadastradas, que podem ser utilizadas para executar consultas na base de dados da Senior.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomQueryModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomQueryModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomQueryModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/CustomQuery/{id}": {
+      "get": {
+        "tags": [
+          "CustomQuery"
+        ],
+        "summary": "Retorna os dados de uma consulta personalizada específica pelo ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da consulta personalizada",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomQueryModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomQueryModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomQueryModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/CustomQuery/ExecuteQuery/{id}": {
+      "get": {
+        "tags": [
+          "CustomQuery"
+        ],
+        "summary": "Executa uma consulta personalizada específica na base de dados da Senior, com base no ID informado, e retorna o resultado da execução.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da consulta personalizada",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "InitialDate",
+            "in": "query",
+            "description": "Data inicial que o sistema deve utilizar na consulta, no formato 'yyyy-MM-ddTHH:mm:ss'. Exemplo: '2025-03-01T00:00:00'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "FinalDate",
+            "in": "query",
+            "description": "Data final que o sistema deve utilizar na consulta, no formato 'yyyy-MM-ddTHH:mm:ss'. Exemplo: '2025-03-01T23:59:59'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "FilterDateByOrder",
+            "in": "query",
+            "schema": {
+              "enum": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/SoftwareSGG/SaneamentoDados": {
+      "get": {
+        "tags": [
+          "SoftwareSGG"
+        ],
+        "summary": "Retorna o resultado de uma consulta executada na base de dados da Senior, com base no tipo de dado selecionado.",
+        "parameters": [
+          {
+            "name": "tipoSaneamentoDados",
+            "in": "query",
+            "description": "Informe o tipo de dado a ser retornado:\r\n0 – Dados relacionados a colaboradores;\r\n1 – Dados relacionados a cargos;\r\n2 – Dados relacionados a setores (locais);\r\n3 – Dados relacionados a filiais.\r\nCaso nenhum valor seja informado, o sistema usará, por padrão, o tipo de dado \"Colaboradores\".",
+            "schema": {
+              "enum": [
+                1,
+                2,
+                3,
+                4
+              ],
+              "type": "integer",
+              "description": "Representa os tipos de dados disponíveis para saneamento.",
+              "format": "int32",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/StatusAPI": {
+      "get": {
+        "tags": [
+          "StatusAPI"
+        ],
+        "summary": "Verifica se a API está ativa e retorna um status HTTP 200 (OK).",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CustomQueryModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Descrição da Consulta.",
+            "nullable": true
+          },
+          "query": {
+            "type": "string",
+            "description": "Texto da Consulta SQL.",
+            "nullable": true
+          },
+          "creationDate": {
+            "type": "string",
+            "description": "Data de Criação da Consulta.",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Representa a estrutura de dados utilizada para definir uma consulta personalizada."
+      },
+      "SystemUserModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 125,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "login": {
+            "maxLength": 125,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "jwtToken": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "Informe o token JWT no campo abaixo. Exemplo: Bearer {seu_token}",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}
